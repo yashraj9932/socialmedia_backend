@@ -22,7 +22,7 @@ exports.getPost = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorResponse("Post Doesnt exist,404"));
+    return next(new ErrorResponse("Post Doesnt exist", 404));
   }
 
   res.status(200).json({ success: true, data: post });
@@ -32,7 +32,7 @@ exports.updateLike = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorResponse("Post Doesnt exist,404"));
+    return next(new ErrorResponse("Post Doesnt exist", 404));
   }
 
   const lpost = post.likes;
@@ -103,31 +103,41 @@ exports.addComment = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: ress });
 });
 
+exports.getComments = asyncHandler(async (req, res, next) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    return next(new ErrorResponse("Post Doesnt exist", 404));
+  }
+  res
+    .status(200)
+    .json({ success: true, count: post.comments.length, data: post.comments });
+});
+
 exports.updateComment = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorResponse("Post Doesnt exist,404"));
+    return next(new ErrorResponse("Post Doesnt exist", 404));
   }
 
   if (!req.body.text) {
     return next(new ErrorResponse("Post Does'nt exist", 404));
   }
-  const ress = await Post.findByIdAndUpdate(
-    req.params.id,
+  const ress = await Post.findOneAndUpdate(
+    { "comments._id": req.params.commentId },
     {
-      $pull: { comments: commentt },
+      $set: {
+        "comments.$.text": req.body.text,
+      },
     },
     {
       new: true,
       runValidators: true,
     }
   );
-
-  const commentt = {
-    text: req.body.text,
-    commentBy: req.user.id,
-  };
+  if (ress === null) {
+    return next(new ErrorResponse("Comment does not exist", 404));
+  }
 
   res.status(200).json({ success: true, data: ress });
 });
@@ -136,7 +146,7 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
 
   if (!post) {
-    return next(new ErrorResponse("Post Doesnt exist,404"));
+    return next(new ErrorResponse("Post Doesnt exist", 404));
   }
 
   const commentt = {
@@ -146,7 +156,11 @@ exports.deleteComment = asyncHandler(async (req, res, next) => {
   const ress = await Post.findByIdAndUpdate(
     req.params.id,
     {
-      $pull: { comments: commentt },
+      $pull: {
+        comments: {
+          _id: req.params.commentId,
+        },
+      },
     },
     {
       new: true,

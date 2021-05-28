@@ -8,6 +8,7 @@ const {
   addComment,
   updateComment,
   deleteComment,
+  getComments,
 } = require("../controllers/posts");
 
 const router = express.Router({ mergeParams: true });
@@ -22,7 +23,7 @@ router.route("/:id").get(getPost);
 
 router.route("/:id/like").put(updateLike);
 
-router.route("/:id/comment").post(addComment);
+router.route("/:id/comment").post(addComment).get(getComments);
 router.route("/:id/:commentId").put(updateComment).delete(deleteComment);
 
 module.exports = router;
