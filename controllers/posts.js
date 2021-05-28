@@ -1,5 +1,6 @@
 const asyncHandler = require("../middleware/async");
 const Post = require("../models/Post");
+const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
@@ -11,7 +12,16 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
 exports.createPost = asyncHandler(async (req, res, next) => {
   req.body.user = req.user.id;
   const post = await Post.create(req.body);
-
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $push: { posts: post._id },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
   res.status(200).json({
     success: true,
     data: post,

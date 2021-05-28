@@ -3,6 +3,84 @@ const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
+// @desc      Follow A User
+// @route     POST /users/:id/follow
+// @access    Private
+exports.followUser = asyncHandler(async (req, res, next) => {
+  if (req.params.id === req.user.id) {
+    return next(new ErrorResponse("User cannot follow itself", 400));
+  }
+
+  const follower = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $push: { following: req.params.id },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  const followed = await User.findByIdAndUpdate(
+    req.params.id,
+    {
+      $push: { followers: req.user.id },
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  res.status(200).json({ success: true, follower, followed });
+});
+
+// @desc      Get A User
+// @route     Get /users/:id
+// @access    Public
+exports.getUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id).populate({
+    path: "posts",
+    select: "picture",
+  });
+  if (!user) {
+    return next(new ErrorResponse("User Not Found", 404));
+  }
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+// @desc      Get A Users Followers
+// @route     Get /users/:id/followers
+// @access    Public
+exports.getFollowers = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorResponse("User Not Found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: user.followers,
+  });
+});
+
+// @desc      Get A Users Following
+// @route     Get /users/:id/following
+// @access    Public
+exports.getFollowing = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorResponse("User Not Found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: user.following,
+  });
+});
+
 // @desc      Register a User
 // @route     POST /users/register
 // @access    Public
