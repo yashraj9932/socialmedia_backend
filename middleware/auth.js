@@ -33,3 +33,24 @@ exports.protect = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Not authorized to access this route", 401));
   }
 });
+
+exports.authorize = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorResponse("Requested User does not exist", 404));
+  }
+  if (user.private !== "public") {
+    if (
+      req.user.following.indexOf(req.params.id) == -1 &&
+      req.user.id !== req.params.id
+    ) {
+      return next(
+        new ErrorResponse(
+          `${req.user.id} does not follow ${req.params.id}`,
+          400
+        )
+      );
+    }
+  }
+  next();
+});

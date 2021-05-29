@@ -13,13 +13,17 @@ const {
 
 const router = express.Router({ mergeParams: true });
 
-const { protect } = require("../middleware/auth");
+const { protect, authorize } = require("../middleware/auth");
+
+const { authorizePost } = require("../middleware/authPost");
 
 router.use(protect);
 
-router.route("/").get(getPosts).post(createPost);
+router.route("/").get(authorize, getPosts).post(createPost);
 
-router.route("/:id").get(getPost);
+// router.use(authorizePost);
+
+router.route("/:id").get(authorizePost, getPost);
 
 router.route("/:id/like").put(updateLike);
 

@@ -9,21 +9,24 @@ const {
   followUser,
 } = require("../controllers/users");
 
-const { protect } = require("../middleware/auth");
+const { protect, authorize } = require("../middleware/auth");
 
 const router = express.Router();
 
 const postRouter = require("./posts");
 
-router.use("/:userId/posts", postRouter);
+router.use("/:id/posts", postRouter);
 
 router.route("/login").post(login);
 router.route("/register").post(register);
 
-router.route("/:id").get(getUser);
+router.use(protect);
 
-router.route("/:id/followers").get(getFollowers);
-router.route("/:id/follow").post(protect, followUser);
-router.route("/:id/following").get(getFollowing);
+router.route("/:id/follow").post(followUser);
+
+router.route("/:id").get(authorize, getUser);
+
+router.route("/:id/followers").get(authorize, getFollowers);
+router.route("/:id/following").get(authorize, getFollowing);
 
 module.exports = router;

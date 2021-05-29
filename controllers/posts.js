@@ -4,7 +4,7 @@ const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
-  const posts = await Post.find({ user: req.params.userId });
+  const posts = await Post.find({ user: req.params.id });
 
   res.status(200).json({ success: true, count: posts.length, data: posts });
 });
