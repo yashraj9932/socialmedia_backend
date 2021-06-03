@@ -1,0 +1,14 @@
+.navbar ul {
+  display: flex;
+  list-style: none;
+  text-align: center;
+  justify-content: center;
+}
+
+.navbar h1 {
+  margin-bottom: 0.6rem;
+}
+
+.navbar li {
+  padding-left: 50%;
+}

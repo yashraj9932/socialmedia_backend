@@ -15,8 +15,6 @@ exports.authorizePost = asyncHandler(async (req, res, next) => {
       req.user.following.indexOf(user._id) == -1 &&
       req.user.id !== user._id.toString()
     ) {
-      //   console.log(typeof req.user.id);
-      //   console.log(typeof user._id);
       return next(
         new ErrorResponse(`${req.user.id} does not follow ${user._id}`, 400)
       );
