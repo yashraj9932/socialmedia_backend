@@ -29,4 +29,6 @@ router.route("/:id").get(authorize, getUser);
 router.route("/:id/followers").get(authorize, getFollowers);
 router.route("/:id/following").get(authorize, getFollowing);
 
+router.route("/:id/bio").put(updateBio);
+
 module.exports = router;

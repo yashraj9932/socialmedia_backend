@@ -46,6 +46,10 @@ const UserSchema = new mongoose.Schema({
     enum: ["Private", "Public"],
     default: "Private",
   },
+  bio: {
+    type: String,
+    default: "",
+  },
 });
 
 // Encrypt password using bcrypt

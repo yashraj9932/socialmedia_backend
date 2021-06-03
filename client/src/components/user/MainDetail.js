@@ -12,12 +12,22 @@ const MainDetail = () => {
           />
         </div>
       </div>
-      <div className="col-md-6">
+      <div className="col-md-6 text-center" style={{ marginTop: "5%" }}>
         <div className="row ">
-          <div className="col-md-4">Posts</div>
-          <div className="col-md-4">Following</div>
-          <div className="col-md-4">Followers</div>
+          <div className="col-md-4">
+            <strong>121</strong>
+            <p>Posts</p>
+          </div>
+          <div className="col-md-4">
+            <strong>300</strong>
+            <p>Following</p>
+          </div>
+          <div className="col-md-4">
+            <strong>520</strong>
+            <p>Followers</p>
+          </div>
         </div>
+        <p style={{ marginTop: "5%" }}>Yahan Par Bio Jayega</p>
       </div>
     </div>
   );
