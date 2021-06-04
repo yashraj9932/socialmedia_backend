@@ -68,7 +68,6 @@ const UserState = (props) => {
     };
     try {
       const res = await axios.post("/users/login", body, config);
-      console.log(res.data);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,

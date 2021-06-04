@@ -55,7 +55,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route     Get /users/user
 // @access    Public
 exports.getLoggedUser = asyncHandler(async (req, res, next) => {
-  console.log(req.user.id);
+  // console.log(req.user.id);
   const user = await User.findById(req.user.id).populate({
     path: "posts",
     select: "picture caption",
@@ -88,7 +88,13 @@ exports.getFollowers = asyncHandler(async (req, res, next) => {
 // @route     Get /users/:id/following
 // @access    Public
 exports.getFollowing = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).populate({
+    path: "following",
+    populate: {
+      path: "posts",
+    },
+  });
+  // const user = await User.findById(req.params.id).populate("following");
   if (!user) {
     return next(new ErrorResponse("User Not Found", 404));
   }

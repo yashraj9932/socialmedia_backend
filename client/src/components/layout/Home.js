@@ -1,25 +1,33 @@
 import React, { useContext, useEffect } from "react";
 import UserContext from "../../context/user/userContext";
+import PostContext from "../../context/posts/postContext";
+import HomeDisp from "./HomeDisp";
 
 const Home = () => {
   const userContext = useContext(UserContext);
+  const postContext = useContext(PostContext);
 
-  const onClick = (e) => {};
-  // useEffect(() => {
-  //   userContext.loadUser();
-  //   // eslint-disable-next-line
-  // }, []);
+  const { user, loadUser } = userContext;
+  const { getallposts, postfollowers } = postContext;
+  useEffect(() => {
+    // loadUser();
+    if (user) {
+      getallposts(user._id);
+    }
+    // eslint-disable-next-line
+  }, [loadUser]);
+  console.log(postfollowers);
   return (
-    <div className="row">
-      <div className=" text-center" style={{ margin: "0 auto " }}>
-        <p>Yash Raj Goel</p>
-        <img src="../../picture.jpeg" alt="picc" />
-        <div style={{ margin: "5% auto" }}>
-          <span id="heart" onClick={onClick}>
-            <i class="fas fa-heart" aria-hidden="true"></i>{" "}
-          </span>
-        </div>
-      </div>
+    <div>
+      {postfollowers.length > 0 &&
+        postfollowers.map((follower) => {
+          return (
+            follower.posts.length > 0 &&
+            follower.posts.map((post) => {
+              return <HomeDisp post={post} name={follower.name} />;
+            })
+          );
+        })}
     </div>
   );
 };

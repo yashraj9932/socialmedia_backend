@@ -8,3 +8,8 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+
+//For posts
+
+export const GET_ALL = "GET_ALL";
+export const POST_ERROR = "POST_ERROR";
