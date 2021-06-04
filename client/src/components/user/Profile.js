@@ -8,24 +8,21 @@ const Profile = () => {
 
   const { loadUser, user } = userContext;
 
-  // useEffect(() => {
-  //   userContext.loadUser();
-  //   // eslint-disable-next-line
-  // }, []);
-  let source;
+  useEffect(() => {
+    loadUser();
+    // eslint-disable-next-line
+  }, []);
   if (user) {
     console.log(user.posts);
-    source = `../../../${user.posts[0].picture}`;
   }
   return (
     <div>
       <MainDetail user={user} />
-      <div style={{ marginTop: "5%" }} className="row">
+      <div style={{ marginTop: "20%" }} className="row">
         {user &&
-          user.posts.map((contact) => {
-            return <UserPosts source={`../../picture.jpeg`} />;
+          user.posts.map((post) => {
+            return <UserPosts source={`/uploads/${post.picture}`} />;
           })}
-        <UserPosts source={source} />
       </div>
     </div>
   );

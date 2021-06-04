@@ -5,7 +5,7 @@ import UserContext from "../../context/user/userContext";
 
 const Navbar = ({ title, icon }) => {
   const userContext = useContext(UserContext);
-  const { isAuthenticated, loadUser, user, logout } = userContext;
+  const { isAuthenticated, loadUser, logout } = userContext;
   useEffect(() => {
     loadUser();
     // eslint-disable-next-line
@@ -19,13 +19,42 @@ const Navbar = ({ title, icon }) => {
   const authLinks = (
     <Fragment>
       <li>
-        <Link to="/">Home</Link>
+        <Link
+          to="/"
+          style={{
+            textDecoration: "none",
+            color: "Black",
+            paddingBottom: "4%",
+            borderBottom: "1px solid black",
+          }}
+        >
+          Home
+        </Link>
       </li>
       <li>
-        <Link to="/profile">Profile</Link>
+        <Link
+          to="/profile"
+          style={{
+            textDecoration: "none",
+            color: "Black",
+            paddingBottom: "4%",
+            borderBottom: "1px solid black",
+          }}
+        >
+          Profile
+        </Link>
       </li>
       <li>
-        <a onClick={onLogout} href="#!">
+        <a
+          onClick={onLogout}
+          href="#!"
+          style={{
+            textDecoration: "none",
+            color: "Black",
+            paddingBottom: "4%",
+            borderBottom: "1px solid black",
+          }}
+        >
           <i className="fas fa-sign-out-alt" />{" "}
         </a>
       </li>
@@ -35,10 +64,30 @@ const Navbar = ({ title, icon }) => {
   const guestLinks = (
     <Fragment>
       <li>
-        <Link to="/register">Register</Link>
+        <Link
+          to="/register"
+          style={{
+            textDecoration: "none",
+            color: "Black",
+            paddingBottom: "4%",
+            borderBottom: "1px solid black",
+          }}
+        >
+          Register
+        </Link>
       </li>
       <li>
-        <Link to="/login">Login</Link>
+        <Link
+          to="/login"
+          style={{
+            textDecoration: "none",
+            color: "Black",
+            paddingBottom: "4%",
+            borderBottom: "1px solid black",
+          }}
+        >
+          Login
+        </Link>
       </li>
     </Fragment>
   );

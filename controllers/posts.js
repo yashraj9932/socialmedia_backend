@@ -5,7 +5,10 @@ const ErrorResponse = require("../utils/errorResponse");
 const path = require("path");
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
-  const posts = await Post.find({ user: req.params.id });
+  const posts = await Post.find({ user: req.params.id }).populate({
+    path: "user",
+    select: "name",
+  });
 
   res.status(200).json({ success: true, count: posts.length, data: posts });
 });
