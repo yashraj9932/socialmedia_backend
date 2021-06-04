@@ -3,6 +3,8 @@ const app = express();
 const colors = require("colors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const fileUpload = require("express-fileupload");
+const path = require("path");
 
 const errorHandler = require("./middleware/error");
 
@@ -14,6 +16,10 @@ const users = require("./routes/users");
 const posts = require("./routes/posts");
 
 app.use(express.json());
+
+app.use(fileUpload());
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/users", users);
 app.use("/posts", posts);
@@ -29,9 +35,9 @@ const server = app.listen(PORT, () => {
   );
 });
 
-// //Handle unhandled promise rejections
-// process.on("unhandledRejection", (err, promise) => {
-//   console.log(`Error: ${err.message}`.red);
-//   //Close the server and exit the process
-//   server.close(() => process.exit(1));
-// });
+//Handle unhandled promise rejections
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Error: ${err.message}`.red);
+  //Close the server and exit the process
+  server.close(() => process.exit(1));
+});

@@ -51,6 +51,24 @@ exports.getUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc      Get Logged in User
+// @route     Get /users/user
+// @access    Public
+exports.getLoggedUser = asyncHandler(async (req, res, next) => {
+  console.log(req.user.id);
+  const user = await User.findById(req.user.id).populate({
+    path: "posts",
+    select: "picture caption",
+  });
+  if (!user) {
+    return next(new ErrorResponse("User Not Found", 404));
+  }
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
 // @desc      Get A Users Followers
 // @route     Get /users/:id/followers
 // @access    Public
@@ -135,3 +153,22 @@ const sendTokenResponse = (user, statusCode, res) => {
     .cookie("token", token, options)
     .json({ success: true, token });
 };
+
+exports.updateBio = asyncHandler(async (req, res, next) => {
+  if (req.params.id !== req.user.id) {
+    return next(
+      new ErrorResponse("User cannot update someone else's bio", 400)
+    );
+  }
+  if (!req.body.bio) {
+    return next(new ErrorResponse("Please Enter A Bio", 404));
+  }
+  const fieldstoUpdate = {
+    bio: req.body.bio,
+  };
+  const ress = await User.findByIdAndUpdate(req.params.id, fieldstoUpdate, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({ success: true, data: ress });
+});

@@ -6,6 +6,12 @@ import Profile from "./components/user/Profile";
 import UserState from "./context/user/UserState";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import setAuthToken from "./utils/setAuthToken";
+import PrivateRoute from "./routing/PrivateRoute";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const App = () => {
   return (
@@ -14,8 +20,8 @@ const App = () => {
         <div className="container">
           <Navbar />
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/profile" component={Profile} />
+            <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute exact path="/profile" component={Profile} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
           </Switch>

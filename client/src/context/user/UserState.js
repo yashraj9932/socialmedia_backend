@@ -2,6 +2,7 @@ import React, { useReducer } from "react";
 import axios from "axios";
 import UserContext from "./userContext";
 import userReducer from "./userReducer";
+import setAuthToken from "../../utils/setAuthToken";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -23,6 +24,21 @@ const UserState = (props) => {
   };
   const [state, dispatch] = useReducer(userReducer, initialState);
 
+  const loadUser = async () => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    try {
+      const res = await axios.get("/users/user/current");
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data.data,
+      });
+    } catch (err) {
+      dispatch({ type: AUTH_ERROR });
+    }
+  };
+
   const register = async (body) => {
     const config = {
       headers: {
@@ -35,6 +51,7 @@ const UserState = (props) => {
         type: REGISTER_SUCCESS,
         payload: res.data,
       });
+      loadUser();
     } catch (error) {
       dispatch({
         type: REGISTER_FAIL,
@@ -56,12 +73,17 @@ const UserState = (props) => {
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
+      loadUser();
     } catch (error) {
       dispatch({
         type: LOGIN_FAIL,
         payload: error.response.data.error,
       });
     }
+  };
+
+  const logout = () => {
+    dispatch({ type: LOGOUT });
   };
 
   return (
@@ -74,6 +96,8 @@ const UserState = (props) => {
         error: state.error,
         register,
         login,
+        loadUser,
+        logout,
       }}
     >
       {props.children}

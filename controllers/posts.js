@@ -2,6 +2,7 @@ const asyncHandler = require("../middleware/async");
 const Post = require("../models/Post");
 const User = require("../models/User");
 const ErrorResponse = require("../utils/errorResponse");
+const path = require("path");
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
   const posts = await Post.find({ user: req.params.id });
@@ -11,20 +12,44 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
 
 exports.createPost = asyncHandler(async (req, res, next) => {
   req.body.user = req.user.id;
-  const post = await Post.create(req.body);
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      $push: { posts: post._id },
-    },
-    {
-      new: true,
-      runValidators: true,
+  if (!req.files) {
+    return next(new ErrorResponse(`Please upload a file`, 400));
+  }
+
+  const file = req.files.file;
+  console.log(file);
+
+  // Make sure the image is a image in any format
+  if (!file.mimetype.startsWith("image")) {
+    return next(new ErrorResponse(`Please upload file in correct format`, 400));
+  }
+  var datetime = Date.now();
+  // Create custom filename
+  file.name = `img_${req.user.id}${datetime}${path.parse(file.name).ext}`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse(`Problem with file upload`, 500));
     }
-  );
-  res.status(200).json({
-    success: true,
-    data: post,
+
+    req.body.picture = file.name;
+    req.body.caption = req.files.caption;
+    const post = await Post.create(req.body);
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $push: { posts: post._id },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(200).json({
+      success: true,
+      data: post,
+    });
   });
 });
 
