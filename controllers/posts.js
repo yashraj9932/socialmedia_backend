@@ -37,7 +37,7 @@ exports.createPost = asyncHandler(async (req, res, next) => {
     }
 
     req.body.picture = file.name;
-    req.body.caption = req.files.caption;
+    // req.body.caption = req.files.caption;
     const post = await Post.create(req.body);
     const user = await User.findByIdAndUpdate(
       req.user.id,

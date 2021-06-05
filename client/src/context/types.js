@@ -13,3 +13,4 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 
 export const GET_ALL = "GET_ALL";
 export const POST_ERROR = "POST_ERROR";
+export const REMOVE_COMMENT = "REMOVE_COMMENT";

@@ -3,14 +3,7 @@ import axios from "axios";
 import PostContext from "./postContext";
 import postReducer from "./postReducer";
 
-import {
-  GET_ALL,
-  ADD_POST,
-  ADD_LIKE,
-  ADD_COMMENT,
-  REMOVE_COMMENT,
-  POST_ERROR,
-} from "../types";
+import { GET_ALL, ADD_POST, POST_ERROR } from "../types";
 
 const PostState = (props) => {
   const initialState = {
@@ -28,7 +21,66 @@ const PostState = (props) => {
         payload: res.data.data,
       });
     } catch (error) {
-      console.log("Code fatt gaya bro");
+      // console.log("Code fatt gaya bro
+      dispatch({
+        type: POST_ERROR,
+        payload: error.data,
+      });
+    }
+  };
+
+  const createPost = async (formData) => {
+    var config = {
+      method: "post",
+      url: `/posts`,
+      data: formData,
+    };
+    try {
+      const res = await axios(config);
+      // const res = await axios.post(`/posts`, formData);
+      console.log(res.data);
+    } catch (error) {
+      dispatch({
+        type: POST_ERROR,
+        payload: error.data,
+      });
+    }
+  };
+
+  const addLike = async (id) => {
+    try {
+      await axios.put(`/posts/${id}/like`);
+    } catch (error) {
+      dispatch({
+        type: POST_ERROR,
+        payload: error.data,
+      });
+    }
+  };
+
+  const addComment = async (text, id) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      console.log(text);
+      await axios.post(`/posts/${id}/comment`, { text: text }, config);
+      getallposts();
+    } catch (error) {
+      dispatch({
+        type: POST_ERROR,
+        payload: error.data,
+      });
+    }
+  };
+
+  const deleteComment = async (postId, id) => {
+    try {
+      await axios.delete(`/posts/${postId}/${id}`);
+      getallposts();
+    } catch (error) {
       dispatch({
         type: POST_ERROR,
         payload: error.data,
@@ -42,6 +94,10 @@ const PostState = (props) => {
         postfollowers: state.postfollowers,
         error: state.error,
         getallposts,
+        deleteComment,
+        addLike,
+        addComment,
+        createPost,
       }}
     >
       {props.children}

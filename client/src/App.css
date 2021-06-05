@@ -22,3 +22,9 @@
   color: red;
   cursor: pointer;
 }
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}

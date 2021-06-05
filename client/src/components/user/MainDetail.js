@@ -1,7 +1,7 @@
 import React from "react";
 
 const MainDetail = ({ user }) => {
-  if (user === null) return <h1></h1>;
+  if (user === null) return;
   const { followers, following, posts, bio, name } = user;
   return (
     <div className="row">
