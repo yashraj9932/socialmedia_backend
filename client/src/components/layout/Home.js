@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../../context/user/userContext";
 import PostContext from "../../context/posts/postContext";
 import HomeDisp from "./HomeDisp";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const userContext = useContext(UserContext);
@@ -26,7 +27,7 @@ const Home = () => {
   };
 
   const onChange2 = (e) => {
-    console.log(e.target.files);
+    // console.log(e.target.files);
 
     const fi = e.target.files;
     setFiles(fi);
@@ -41,6 +42,7 @@ const Home = () => {
     setShow(false);
   };
 
+  // window.location.reload();
   useEffect(() => {
     loadUser();
     if (user) {
@@ -51,6 +53,18 @@ const Home = () => {
   return (
     <div>
       <div>
+        <Link to="/search">
+          <p
+            className="btn btn-dark"
+            style={{
+              textAlign: "right",
+              borderRadius: "6px",
+              marginRight: "2%",
+            }}
+          >
+            Search {"  "} <i className="fas fa-search"></i>
+          </p>
+        </Link>
         <p
           className="btn btn-dark"
           style={{ textAlign: "right", borderRadius: "6px" }}
@@ -100,7 +114,7 @@ const Home = () => {
             return (
               follower.posts.length > 0 &&
               follower.posts.map((post) => {
-                return <HomeDisp post={post} name={follower.name} />;
+                return <HomeDisp post={post} follower={follower} />;
               })
             );
           })}

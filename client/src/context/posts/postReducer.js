@@ -1,9 +1,8 @@
-import { GET_ALL, ADD_POST, POST_ERROR } from "../types";
+import { GET_ALL, POST_ERROR } from "../types";
 
 const postReducer = (state, action) => {
   switch (action.type) {
     case GET_ALL:
-      // console.log(action.payload);
       return {
         ...state,
         postfollowers: [...action.payload],
@@ -11,6 +10,7 @@ const postReducer = (state, action) => {
     case POST_ERROR:
       return {
         ...state,
+        error: action.payload,
       };
     default:
       return {

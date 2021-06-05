@@ -2,7 +2,9 @@ import React, { useContext, useState } from "react";
 import PostContext from "../../context/posts/postContext";
 import Comment from "./Comment";
 
-const HomeDisp = ({ post, name }) => {
+import { Link } from "react-router-dom";
+
+const HomeDisp = ({ post, follower }) => {
   const postContext = useContext(PostContext);
 
   const [cs, setCs] = useState(false);
@@ -10,6 +12,8 @@ const HomeDisp = ({ post, name }) => {
   const onComment = (e) => {
     setCs(true);
   };
+
+  const { name } = follower;
 
   const { likes, caption, picture, comments, _id } = post;
   const onLike = (e) => {
@@ -35,7 +39,9 @@ const HomeDisp = ({ post, name }) => {
     >
       <div className=" text-center" style={{ margin: "0 auto " }}>
         <p>
-          <strong>{name}</strong>
+          <Link to={`/profile/${follower._id}`}>
+            <strong>{name}</strong>
+          </Link>
         </p>
         <img
           src={`/uploads/${picture}`}

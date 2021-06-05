@@ -7,20 +7,34 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_ERRORS,
+  OTHERUSER_LOADED,
+  SEARCHED_USERS,
 } from "../types";
 
 const userReducer = (state, action) => {
   switch (action.type) {
     case USER_LOADED:
+      //isko hatane
+      localStorage.setItem("user", action.payload);
+
       return {
         ...state,
         user: action.payload,
         isAuthenticated: true,
         loading: false,
       };
+    case OTHERUSER_LOADED:
+      return {
+        ...state,
+        otheruser: action.payload,
+        // isAuthenticated: true,
+        // loading: false,
+      };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem("token", action.payload.token);
+      //isko hatane
+      localStorage.setItem("user", action.payload);
       return {
         ...state,
         ...action.payload,
@@ -32,6 +46,8 @@ const userReducer = (state, action) => {
     case AUTH_ERROR:
     case LOGOUT:
       localStorage.removeItem("token");
+      //isko hatane
+      localStorage.removeItem("user");
       return {
         ...state,
         loading: false,
@@ -44,6 +60,13 @@ const userReducer = (state, action) => {
       return {
         ...state,
         error: null,
+      };
+    case SEARCHED_USERS:
+      return {
+        ...state,
+        filtered: [...action.payload],
+        isAuthenticated: true,
+        loading: false,
       };
     default:
       return {

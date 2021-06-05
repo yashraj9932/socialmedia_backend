@@ -20,7 +20,6 @@ exports.createPost = asyncHandler(async (req, res, next) => {
   }
 
   const file = req.files.file;
-  // console.log(file);
 
   // Make sure the image is a image in any format
   if (!file.mimetype.startsWith("image")) {

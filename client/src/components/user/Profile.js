@@ -12,9 +12,6 @@ const Profile = () => {
     loadUser();
     // eslint-disable-next-line
   }, []);
-  // if (user) {
-  //   console.log(user.posts);
-  // }
   return (
     <div>
       <MainDetail user={user} />

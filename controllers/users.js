@@ -10,27 +10,58 @@ exports.followUser = asyncHandler(async (req, res, next) => {
   if (req.params.id === req.user.id) {
     return next(new ErrorResponse("User cannot follow itself", 400));
   }
-
-  const follower = await User.findByIdAndUpdate(
-    req.user.id,
-    {
-      $push: { following: req.params.id },
-    },
-    {
-      new: true,
-      runValidators: true,
+  let flri = await User.findById(req.user.id);
+  let f = -1;
+  const flr = flri.following;
+  for (var i = 0; i < flr.length; i++) {
+    if (flr[i] == req.params.id) {
+      f = i;
     }
-  );
-  const followed = await User.findByIdAndUpdate(
-    req.params.id,
-    {
-      $push: { followers: req.user.id },
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  }
+  let follower, followed;
+  if (f == -1) {
+    follower = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $push: { following: req.params.id },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    followed = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { followers: req.user.id },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  } else {
+    follower = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $pull: { following: req.params.id },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    followed = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { followers: req.user.id },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+  }
   res.status(200).json({ success: true, follower, followed });
 });
 
@@ -55,7 +86,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route     Get /users/user
 // @access    Public
 exports.getLoggedUser = asyncHandler(async (req, res, next) => {
-  // console.log(req.user.id);
   const user = await User.findById(req.user.id).populate({
     path: "posts",
     select: "picture caption",
@@ -161,20 +191,25 @@ const sendTokenResponse = (user, statusCode, res) => {
 };
 
 exports.updateBio = asyncHandler(async (req, res, next) => {
-  if (req.params.id !== req.user.id) {
-    return next(
-      new ErrorResponse("User cannot update someone else's bio", 400)
-    );
-  }
   if (!req.body.bio) {
     return next(new ErrorResponse("Please Enter A Bio", 404));
   }
   const fieldstoUpdate = {
     bio: req.body.bio,
   };
-  const ress = await User.findByIdAndUpdate(req.params.id, fieldstoUpdate, {
+  const ress = await User.findByIdAndUpdate(req.user.id, fieldstoUpdate, {
     new: true,
     runValidators: true,
   });
   res.status(200).json({ success: true, data: ress });
+});
+
+exports.getAllUsers = asyncHandler(async (req, res, next) => {
+  const users = await User.find().select("name");
+
+  res.status(200).json({
+    success: true,
+    count: users.length,
+    data: users,
+  });
 });

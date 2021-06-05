@@ -3,7 +3,7 @@ import axios from "axios";
 import PostContext from "./postContext";
 import postReducer from "./postReducer";
 
-import { GET_ALL, ADD_POST, POST_ERROR } from "../types";
+import { GET_ALL, POST_ERROR } from "../types";
 
 const PostState = (props) => {
   const initialState = {
@@ -21,7 +21,7 @@ const PostState = (props) => {
         payload: res.data.data,
       });
     } catch (error) {
-      // console.log("Code fatt gaya bro
+      console.log(error.data, "err");
       dispatch({
         type: POST_ERROR,
         payload: error.data,
@@ -65,7 +65,6 @@ const PostState = (props) => {
       },
     };
     try {
-      console.log(text);
       await axios.post(`/posts/${id}/comment`, { text: text }, config);
       getallposts();
     } catch (error) {
