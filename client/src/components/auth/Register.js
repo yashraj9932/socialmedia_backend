@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import UserContext from "../../context/user/userContext";
 
 const Register = (props) => {
-  const userContext = useContext(UserContext);
+  const userContext = useContext(UserContext); 
   const { register, isAuthenticated } = userContext;
 
   useEffect(() => {

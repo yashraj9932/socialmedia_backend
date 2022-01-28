@@ -83,7 +83,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Get Logged in User
-// @route     Get /users/user
+// @route     Get /users/user/current
 // @access    Public
 exports.getLoggedUser = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).populate({
