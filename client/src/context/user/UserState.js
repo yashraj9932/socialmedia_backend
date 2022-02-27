@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import axios from "axios";
+import { url } from "../../config";
 import UserContext from "./userContext";
 import userReducer from "./userReducer";
 import setAuthToken from "../../utils/setAuthToken";
@@ -34,7 +35,7 @@ const UserState = (props) => {
       setAuthToken(localStorage.token);
     }
     try {
-      const res = await axios.get("/users/user/current");
+      const res = await axios.get(url + "/users/user/current");
       dispatch({
         type: USER_LOADED,
         payload: res.data.data,
@@ -46,7 +47,7 @@ const UserState = (props) => {
 
   const urluser = async (id) => {
     try {
-      const res = await axios.get(`/users/${id}`);
+      const res = await axios.get(url + `/users/${id}`);
       dispatch({
         type: OTHERUSER_LOADED,
         payload: res.data.data,
@@ -63,7 +64,7 @@ const UserState = (props) => {
       },
     };
     try {
-      const res = await axios.post("/users/register", body, config);
+      const res = await axios.post(url + "/users/register", body, config);
       dispatch({
         type: REGISTER_SUCCESS,
         payload: res.data,
@@ -84,7 +85,7 @@ const UserState = (props) => {
       },
     };
     try {
-      const res = await axios.post("/users/login", body, config);
+      const res = await axios.post(url + "/users/login", body, config);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
@@ -109,7 +110,7 @@ const UserState = (props) => {
       },
     };
     try {
-      await axios.put(`users/update/bio`, { bio }, config);
+      await axios.put(url + `users/update/bio`, { bio }, config);
       loadUser();
     } catch (error) {
       dispatch({
@@ -126,13 +127,13 @@ const UserState = (props) => {
       },
     };
     try {
-      await axios.post(`/users/${id}/follow`, {}, config);
+      await axios.post(url + `/users/${id}/follow`, {}, config);
     } catch (err) {}
   };
 
   const getAllUsers = async () => {
     try {
-      const res = await axios.get("/users");
+      const res = await axios.get(url + "/users");
       dispatch({
         type: SEARCHED_USERS,
         payload: res.data.data,

@@ -15,6 +15,9 @@ connectDB();
 const users = require("./routes/users");
 const posts = require("./routes/posts");
 
+const cors = require("cors");
+app.use(cors());
+
 app.use(express.json());
 
 app.use(fileUpload());
