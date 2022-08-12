@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import PostContext from "../../context/posts/postContext";
 import Comment from "./Comment";
+import { url } from "../../config";
 
 import { Link } from "react-router-dom";
 
@@ -44,7 +45,7 @@ const HomeDisp = ({ post, follower }) => {
           </Link>
         </p>
         <img
-          src={`/uploads/${picture}`}
+          src={`${url}/uploads/${picture}`}
           alt="picc"
           style={{
             maxWidth: "100%",
