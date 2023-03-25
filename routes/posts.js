@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express')
 
 const {
   getPosts,
@@ -8,26 +8,26 @@ const {
   addComment,
   updateComment,
   deleteComment,
-  getComments,
-} = require("../controllers/posts");
+  getComments
+} = require('../controllers/posts')
 
-const router = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true })
 
-const { protect, authorize } = require("../middleware/auth");
+const { protect, authorize } = require('../middleware/auth')
 
-const { authorizePost } = require("../middleware/authPost");
+const { authorizePost } = require('../middleware/authPost')
 
-router.use(protect);
+router.use(protect)
 
-router.route("/").get(authorize, getPosts).post(createPost);
+router.route('/').get(authorize, getPosts).post(createPost)
 
 // router.use(authorizePost);
 
-router.route("/:id").get(authorizePost, getPost);
+router.route('/:id').get(authorizePost, getPost)
 
-router.route("/:id/like").put(updateLike);
+router.route('/:id/like').put(updateLike)
 
-router.route("/:id/comment").post(addComment).get(getComments);
-router.route("/:id/:commentId").put(updateComment).delete(deleteComment);
+router.route('/:id/comment').post(addComment).get(getComments)
+router.route('/:id/:commentId').put(updateComment).delete(deleteComment)
 
-module.exports = router;
+module.exports = router

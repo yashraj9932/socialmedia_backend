@@ -17,7 +17,7 @@ const Navbar = ({ title, icon }) => {
   };
 
   const authLinks = (
-    <Fragment>
+    <>
       <li>
         <Link
           to="/"
@@ -45,6 +45,24 @@ const Navbar = ({ title, icon }) => {
         </Link>
       </li>
       <li>
+        <Link
+          to="/search"
+          style={{
+            textDecoration: "none",
+            color: "Black",
+            paddingBottom: "4%",
+            borderBottom: "1px solid black",
+            display: "flex",
+          }}
+        >
+          Search
+          <i
+            style={{ marginLeft: "10%", marginTop: "5%" }}
+            className="fas fa-search"
+          />
+        </Link>
+      </li>
+      <li>
         <a
           onClick={onLogout}
           href="#!"
@@ -58,11 +76,11 @@ const Navbar = ({ title, icon }) => {
           <i className="fas fa-sign-out-alt" />{" "}
         </a>
       </li>
-    </Fragment>
+    </>
   );
 
   const guestLinks = (
-    <Fragment>
+    <>
       <li>
         <Link
           to="/register"
@@ -89,18 +107,18 @@ const Navbar = ({ title, icon }) => {
           Login
         </Link>
       </li>
-    </Fragment>
+    </>
   );
 
   return (
     <div className="navbar">
-      <h1>
+      <h1 style={{ margin: "0 auto" }}>
         <Link to="/">
           <img
             src="../../../instagramicon.png"
             alt="Instagram"
             className="img-fluid"
-            style={{ height: "80px" }}
+            style={{ height: "50px", marginLeft: "50%" }}
           />
         </Link>
       </h1>

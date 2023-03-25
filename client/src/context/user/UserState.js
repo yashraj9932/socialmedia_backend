@@ -36,6 +36,7 @@ const UserState = (props) => {
     }
     try {
       const res = await axios.get(url + "/users/user/current");
+      console.log(res);
       dispatch({
         type: USER_LOADED,
         payload: res.data.data,
@@ -110,9 +111,10 @@ const UserState = (props) => {
       },
     };
     try {
-      await axios.put(url + `users/update/bio`, { bio }, config);
+      await axios.put(url + "users/update/bio", { bio }, config);
       loadUser();
     } catch (error) {
+      console.log(error, 30);
       dispatch({
         type: LOGIN_FAIL,
         payload: error.response.data.error,

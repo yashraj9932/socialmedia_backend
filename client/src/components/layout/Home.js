@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../../context/user/userContext";
 import PostContext from "../../context/posts/postContext";
 import HomeDisp from "./HomeDisp";
-import { Link } from "react-router-dom";
 
 const Home = () => {
   const userContext = useContext(UserContext);
@@ -27,8 +26,6 @@ const Home = () => {
   };
 
   const onChange2 = (e) => {
-    // console.log(e.target.files);
-
     const fi = e.target.files;
     setFiles(fi);
   };
@@ -51,26 +48,10 @@ const Home = () => {
     // eslint-disable-next-line
   }, [postfollowers, getallposts]);
   return (
-    <div>
-      <div>
-        <Link to="/search">
-          <p
-            className="btn btn-dark"
-            style={{
-              textAlign: "right",
-              borderRadius: "6px",
-              marginRight: "2%",
-            }}
-          >
-            Search {"  "} <i className="fas fa-search"></i>
-          </p>
-        </Link>
-        <p
-          className="btn btn-dark"
-          style={{ textAlign: "right", borderRadius: "6px" }}
-          onClick={onCp}
-        >
-          Create {"  "} <i className="fas fa-plus"></i>
+    <>
+      <div style={{ textAlign: "center", transform: "translateX(-2%)" }}>
+        <p className="btn" onClick={onCp}>
+          Create {"  "} <i className="fas fa-plus" />
         </p>
       </div>
       {show && (
@@ -119,7 +100,7 @@ const Home = () => {
             );
           })}
       </div>
-    </div>
+    </>
   );
 };
 

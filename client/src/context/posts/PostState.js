@@ -1,92 +1,92 @@
-import { useReducer } from "react";
-import axios from "axios";
-import { url } from "../../config";
-import PostContext from "./postContext";
-import postReducer from "./postReducer";
+import { useReducer } from 'react'
+import axios from 'axios'
+import { url } from '../../config'
+import PostContext from './postContext'
+import postReducer from './postReducer'
 
-import { GET_ALL, POST_ERROR } from "../types";
+import { GET_ALL, POST_ERROR } from '../types'
 
 const PostState = (props) => {
   const initialState = {
     postfollowers: [],
-    error: null,
-  };
+    error: null
+  }
 
-  const [state, dispatch] = useReducer(postReducer, initialState);
+  const [state, dispatch] = useReducer(postReducer, initialState)
 
   const getallposts = async (id) => {
     try {
-      const res = await axios.get(url + `/users/${id}/following`);
+      const res = await axios.get(url + `/users/${id}/following`)
       dispatch({
         type: GET_ALL,
-        payload: res.data.data,
-      });
+        payload: res.data.data
+      })
     } catch (error) {
-      console.log(error.data, "err");
+      console.log(error.data, 'err')
       dispatch({
         type: POST_ERROR,
-        payload: error.data,
-      });
+        payload: error.data
+      })
     }
-  };
+  }
 
   const createPost = async (formData) => {
-    var config = {
-      method: "post",
+    const config = {
+      method: 'post',
       url: `${url}/posts`,
-      data: formData,
-    };
+      data: formData
+    }
     try {
-      const res = await axios(config);
+      const res = await axios(config)
       // const res = await axios.post(`/posts`, formData);
-      console.log(res.data);
+      console.log(res.data)
     } catch (error) {
       dispatch({
         type: POST_ERROR,
-        payload: error.data,
-      });
+        payload: error.data
+      })
     }
-  };
+  }
 
   const addLike = async (id) => {
     try {
-      await axios.put(url + `/posts/${id}/like`);
+      await axios.put(url + `/posts/${id}/like`)
     } catch (error) {
       dispatch({
         type: POST_ERROR,
-        payload: error.data,
-      });
+        payload: error.data
+      })
     }
-  };
+  }
 
   const addComment = async (text, id) => {
     const config = {
       headers: {
-        "Content-Type": "application/json",
-      },
-    };
+        'Content-Type': 'application/json'
+      }
+    }
     try {
-      await axios.post(url + `/posts/${id}/comment`, { text: text }, config);
-      getallposts();
+      await axios.post(url + `/posts/${id}/comment`, { text }, config)
+      getallposts()
     } catch (error) {
       dispatch({
         type: POST_ERROR,
-        payload: error.data,
-      });
+        payload: error.data
+      })
     }
-  };
+  }
 
   const deleteComment = async (postId, id) => {
     try {
-      await axios.delete(url + `/posts/${postId}/${id}`);
-      getallposts();
+      await axios.delete(url + `/posts/${postId}/${id}`)
+      getallposts()
     } catch (error) {
       dispatch({
         type: POST_ERROR,
-        payload: error.data,
-      });
+        payload: error.data
+      })
     }
-  };
+  }
 
   return (
     <PostContext.Provider
@@ -97,12 +97,12 @@ const PostState = (props) => {
         deleteComment,
         addLike,
         addComment,
-        createPost,
+        createPost
       }}
     >
       {props.children}
     </PostContext.Provider>
-  );
-};
+  )
+}
 
-export default PostState;
+export default PostState

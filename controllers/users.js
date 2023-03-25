@@ -10,10 +10,10 @@ exports.followUser = asyncHandler(async (req, res, next) => {
   if (req.params.id === req.user.id) {
     return next(new ErrorResponse("User cannot follow itself", 400));
   }
-  let flri = await User.findById(req.user.id);
+  const flri = await User.findById(req.user.id);
   let f = -1;
   const flr = flri.following;
-  for (var i = 0; i < flr.length; i++) {
+  for (let i = 0; i < flr.length; i++) {
     if (flr[i] == req.params.id) {
       f = i;
     }
@@ -197,6 +197,7 @@ exports.updateBio = asyncHandler(async (req, res, next) => {
   const fieldstoUpdate = {
     bio: req.body.bio,
   };
+
   const ress = await User.findByIdAndUpdate(req.user.id, fieldstoUpdate, {
     new: true,
     runValidators: true,
