@@ -118,7 +118,7 @@ const Navbar = ({ title, icon }) => {
             src="../../../instagramicon.png"
             alt="Instagram"
             className="img-fluid"
-            style={{ height: "50px", marginLeft: "50%" }}
+            style={{ height: "50px", marginLeft: "60%" }}
           />
         </Link>
       </h1>

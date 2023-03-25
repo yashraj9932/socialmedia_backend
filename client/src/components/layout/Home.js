@@ -8,7 +8,7 @@ const Home = () => {
   const postContext = useContext(PostContext);
 
   const { user, loadUser } = userContext;
-  const { getallposts, postfollowers } = postContext;
+  const { getallposts, postfollowers, createPost } = postContext;
 
   const [caption, setCaption] = useState("");
   const [files, setFiles] = useState([]);
@@ -35,7 +35,7 @@ const Home = () => {
     const formData = new FormData();
     formData.append("file", files[0]);
     formData.append("caption", caption);
-    postContext.createPost(formData);
+    createPost(formData);
     setShow(false);
   };
 
@@ -90,7 +90,7 @@ const Home = () => {
         </form>
       )}
       <div>
-        {postfollowers.length > 0 &&
+        {postfollowers.length > 0 ? (
           postfollowers.map((follower) => {
             return (
               follower.posts.length > 0 &&
@@ -98,7 +98,12 @@ const Home = () => {
                 return <HomeDisp post={post} follower={follower} />;
               })
             );
-          })}
+          })
+        ) : (
+          <p style={{ color: "red", textAlign: "center" }}>
+            People you follow have no posts!
+          </p>
+        )}
       </div>
     </>
   );

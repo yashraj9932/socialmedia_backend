@@ -2,6 +2,7 @@ const asyncHandler = require("../middleware/async");
 const ErrorResponse = require("../utils/errorResponse");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const path = require("path");
 
 // @desc      Follow A User
 // @route     POST /users/:id/follow
@@ -203,6 +204,40 @@ exports.updateBio = asyncHandler(async (req, res, next) => {
     runValidators: true,
   });
   res.status(200).json({ success: true, data: ress });
+});
+
+exports.updateDP = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user.id;
+  if (!req.files) {
+    return next(new ErrorResponse("Please upload a file", 400));
+  }
+
+  const file = req.files.file;
+
+  // Make sure the image is a image in any format
+  if (!file.mimetype.startsWith("image")) {
+    return next(new ErrorResponse("Please upload file in correct format", 400));
+  }
+
+  const datetime = Date.now();
+  // Create custom filename
+  file.name = `img_${req.user.id}${datetime}${path.parse(file.name).ext}`;
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse("Problem with file upload", 500));
+    }
+
+    req.body.picture = file.name;
+    const fieldstoUpdate = {
+      displayPic: req.body.picture,
+    };
+    const ress = await User.findByIdAndUpdate(req.user.id, fieldstoUpdate, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({ success: true, data: ress });
+  });
 });
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {

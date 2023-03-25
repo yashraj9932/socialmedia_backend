@@ -36,7 +36,6 @@ const UserState = (props) => {
     }
     try {
       const res = await axios.get(url + "/users/user/current");
-      console.log(res);
       dispatch({
         type: USER_LOADED,
         payload: res.data.data,
@@ -111,14 +110,26 @@ const UserState = (props) => {
       },
     };
     try {
-      await axios.put(url + "users/update/bio", { bio }, config);
+      await axios.put(url + "/users/update/bio", { bio }, config);
       loadUser();
     } catch (error) {
-      console.log(error, 30);
       dispatch({
         type: LOGIN_FAIL,
         payload: error.response.data.error,
       });
+    }
+  };
+
+  const addDP = async (formData) => {
+    const config = {
+      method: "put",
+      url: `${url}/users/update/dp`,
+      data: formData,
+    };
+    try {
+      await axios(config);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -159,6 +170,7 @@ const UserState = (props) => {
         logout,
         urluser,
         addBio,
+        addDP,
         followUser,
         getAllUsers,
       }}
