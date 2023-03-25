@@ -1,0 +1,5 @@
+{
+  "version": 2,
+  "name": "insta-api",
+  "rewrites": [{ "source": "/api/(.*)", "destination": "/server" }]
+}
