@@ -1,6 +1,5 @@
 import { useReducer } from "react";
 import axios from "axios";
-import { url } from "../../config";
 import PostContext from "./postContext";
 import postReducer from "./postReducer";
 
@@ -16,7 +15,9 @@ const PostState = (props) => {
 
   const getallposts = async (id) => {
     try {
-      const res = await axios.get(url + `/users/${id}/following`);
+      const res = await axios.get(
+        process.env.REACT_APP_SITE + `/users/${id}/following`
+      );
       dispatch({
         type: GET_ALL,
         payload: res.data.data,
@@ -33,7 +34,7 @@ const PostState = (props) => {
   const createPost = async (formData) => {
     const config = {
       method: "post",
-      url: `${url}/posts`,
+      url: `${process.env.REACT_APP_SITE}/posts`,
       data: formData,
     };
     try {
@@ -48,7 +49,7 @@ const PostState = (props) => {
 
   const addLike = async (id) => {
     try {
-      await axios.put(url + `/posts/${id}/like`);
+      await axios.put(process.env.REACT_APP_SITE + `/posts/${id}/like`);
     } catch (error) {
       dispatch({
         type: POST_ERROR,
@@ -64,7 +65,11 @@ const PostState = (props) => {
       },
     };
     try {
-      await axios.post(url + `/posts/${id}/comment`, { text }, config);
+      await axios.post(
+        process.env.REACT_APP_SITE + `/posts/${id}/comment`,
+        { text },
+        config
+      );
       getallposts();
     } catch (error) {
       dispatch({
@@ -76,7 +81,7 @@ const PostState = (props) => {
 
   const deleteComment = async (postId, id) => {
     try {
-      await axios.delete(url + `/posts/${postId}/${id}`);
+      await axios.delete(process.env.REACT_APP_SITE + `/posts/${postId}/${id}`);
       getallposts();
     } catch (error) {
       dispatch({

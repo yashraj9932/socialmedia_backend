@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { url } from "../../config";
 import UserContext from "../../context/user/userContext";
 
 const MainDetail = ({ user }) => {
@@ -40,7 +39,7 @@ const MainDetail = ({ user }) => {
           <img
             src={
               user?.displayPic
-                ? `${url}/uploads/${user?.displayPic}`
+                ? `${process.env.REACT_APP_SITE}/uploads/${user?.displayPic}`
                 : "../../../picture.jpeg"
             }
             alt="profilepic"

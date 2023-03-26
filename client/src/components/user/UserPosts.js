@@ -1,12 +1,11 @@
 import React from "react";
-import { url } from "../../config";
 
 const UserPosts = ({ source }) => {
   return (
     <div className="col-md-4 text-center" style={{ marginTop: "2%" }}>
       <div>
         <img
-          src={url + source}
+          src={process.env.REACT_APP_SITE + source}
           alt="imag-post"
           style={{
             // height: "100%",
